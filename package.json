@@ -1,0 +1,33 @@
+{
+  "name": "library_backend",
+  "version": "1.0.0",
+  "description": "These are the backend services of a library project for a college assignment. Class of Internet Coding 2 of 2021/1",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsnd --respawn index.ts",
+    "dev": "nodemon --watch 'src/' --exec 'ts-node src/index.ts' -e ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ndnzingano/library_backend.git"
+  },
+  "author": "Nadine Zingano",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ndnzingano/library_backend/issues"
+  },
+  "homepage": "https://github.com/ndnzingano/library_backend#readme",
+  "dependencies": {
+    "@types/express": "^4.17.12",
+    "@types/mysql": "^2.15.18",
+    "express": "^4.17.1",
+    "mysql": "^2.18.1",
+    "ts-node-dev": "^1.1.6"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.2.4"
+  }
+}
