@@ -1,94 +1,108 @@
-import connexion from './../config/dbConnexion'
+import connection from '../config/dbConnection'
+import { IBook, IDBError } from '../utils/types'
 import { deleteBook, getAllBooks, getByBookId, insertBook } from './../repository/bookRepository'
+import {v4 as uuidv4 } from 'uuid'
+
 
 export const getAllBooksController= (req:any, res:any) => {
-    // getAllBooks((erro,produtos) => {
-    //     if(erro){
-    //         res.status(500).json({"erro:":"Database Error"})
-    //         console.log(erro)
-    //     }
-    //     else {
-    //         res.json(produtos)
-    //     }
-    // })
+    getAllBooks((error: IDBError, book: IBook) => {
+        if(error){
+            res.status(error).json(
+                {
+                    "Type": "There has been a database error!",
+                    "Message": error.sqlMessage,
+                    "Query": error.sql
+                })     
+         }
+        else {
+            // console.log('res :>> ', res);
+            res.json(book)
+        }
+    })
 }
 
 export const insertBookController = (req:any, res:any) => {    
-    //Obter o dado do request - nome e o preco
-    // const produto = req.body;
+    const book = req.body;
+    book.id = uuidv4();
     
-    // insertBook(produto, (erro, produtoSalvo) => {
-    //     if(erro){
-    //         res.status(500).json({"erro:":"Database Error"})
-    //         console.log(erro)
-    //     }
-    //     else {
-    //         res.status(201).json(produtoSalvo)
-    //     }
-    // })
+    insertBook(book, (error: IDBError, savedBook: IBook) => {
+        if(error){
+            res.status(500).json(
+                {
+                    "Type": "There has been a database error!",
+                    "Message": error.sqlMessage,
+                    "Query": error.sql
+                })
+        }
+        else {
+            res.status(201).json(savedBook)
+        }
+    })
 }
-export const getByBookIdController = (req:any, res:any) => {    
-    // const id = +req.params.id;
-    // if(isNaN(id)){
-    //     const error = {
-    //         status: 400,
-    //         msg: "Id deve ser um numero"
-    //     }
-    //     res.status(error.status).json(error)
-    // }
-    // else{
-    //     getByBookId(id, (erro, produto) => {
-    //         if(erro){
-    //             res.status(erro.status).json(erro)
-    //         }
-    //         else {
-    //             res.json(produto)
-    //         }
-    //     })
-    // }
+export const getByBookIdController = (req:any, res:any) => {  
+    const id = req.params.id;
+    getByBookId(id, (error: any, book: IBook) => {
+        if(error){
+          res.status(error.status).json(
+            {
+              "Type": "There has been a network error!",
+              "Status": error.status,
+              "Message": error.message,
+          })
+        }
+        else {
+            res.json(book)
+        }
+    })
+  
 }
 
 export const updateBookController = (req:any, res:any) => {
-    // const id = req.params.id;
-    // const prod = req.body;
+    const id = req.params.id;
+    const book: IBook = req.body;
 
-    // const sql = `UPDATE produto SET nome=?, preco=? WHERE id=?`;
-    // connexion.query(sql, [prod.nome, prod.preco, id], (erro, rows) => {
-    //     if(erro){
-    //         res.status(500).json({"erro:":"Database Error"})
-    //         console.log(erro)
-    //     }
-    //     else {
-    //         prod.id = +id; //Sinal de "+" -> converte String para number (ou usar parseInt)
-    //         res.json(prod);
-    //     }
-    // })
+    const sql = `UPDATE books SET title=?, authorFirstName=?, authorLastName=?, isbn=?, pagesNr=? WHERE id=?`;
+    connection.query(sql, [book.title, book.authorFirstName, book.authorLastName, book.isbn, book.pagesNr, id], (error, rows) => {
+        if(error){
+          res.status(error.code).json(
+            {
+              "Type": "There has been a database error!",
+              "Code": error.code,
+              "Message": error.sqlMessage,
+              "Query": error.sql          
+          })
+        }
+        else {
+            res.json(book);
+        }
+    })
 }
 
 export const deleteBookController = (req:any, res:any) => {
-    // const id = +req.params.id;
-    // if(isNaN(id)){
-    //     const error = {
-    //         status: 400,
-    //         msg: "Id deve ser um numero"
-    //     }
-    //     res.status(error.status).json(error)
-    // }
-    // else{
-    //     getByBookId(id, (erro, produto) => {
-    //         if(erro){
-    //             res.status(erro.status).json(erro)
-    //         }
-    //         else {
-    //             deleteBook(id, (erro, id) => {
-    //                 if(erro){
-    //                     res.status(erro.status).json(erro)
-    //                 }
-    //                 else {
-    //                     res.json(produto)
-    //                 }        
-    //             })
-    //         }
-    //     })
-    // }
+  const id = req.params.id;    
+    getByBookId(id, (error: any, book: IBook) => {
+      if(error){
+        res.status(error.status).json(
+          {
+            "Type": "There has been a network error!",
+            "Status": error.status,
+            "Message": error.message
+          })
+      }
+      else {
+        deleteBook(id, (error: any, id: string) => {
+          if(error){
+            res.status(error.status).json(
+              {
+                "Type": "There has been a network error!",
+                "Status": error.status,
+                "Message": error.message
+              })
+          }
+          else {
+            res.json(book)
+          }        
+        })
+      }
+    })
 }

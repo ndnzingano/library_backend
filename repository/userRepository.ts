@@ -1,16 +1,16 @@
-import connexion from './../config/dbConnexion'
+// import connexion from '../config/dbConnection'
 
 export const getAllUsers = (callback: any) => {
-    const sql = "SELECT * FROM usuario";
+    // const sql = "SELECT * FROM usuario";
 
-    connexion.query(sql, (erro, rows) => {
-        if(erro){            
-            callback(erro,null);
-        }
-        else {
-            callback(null, rows);
-        }
-    })
+    // connexion.query(sql, (erro, rows) => {
+    //     if(erro){            
+    //         callback(erro,null);
+    //     }
+    //     else {
+    //         callback(null, rows);
+    //     }
+    // })
 }
 
 export const getByUsername = (username: string, callback: any) => {

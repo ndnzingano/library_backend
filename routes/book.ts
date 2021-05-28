@@ -1,11 +1,11 @@
 import express from 'express'
 const routes = express.Router();
-// const produtoController = require('../controller/produtoController')
+import {getAllBooksController, insertBookController, getByBookIdController, deleteBookController,updateBookController  } from './../controller/bookController'
 
-// routes.get('/', produtoController.listar)
-// routes.post('/', produtoController.inserir)
-// routes.get('/:id', produtoController.buscarPorId)
-// routes.put('/:id', produtoController.atualizar)
-// routes.delete('/:id', produtoController.deletar)
+routes.get('/', getAllBooksController)
+routes.post('/', insertBookController)
+routes.get('/:id', getByBookIdController)
+routes.put('/:id', updateBookController)
+routes.delete('/:id', deleteBookController)
 
 export default routes
