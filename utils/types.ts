@@ -11,6 +11,18 @@ export interface IBooks {
     books: IBook[]
 }
 
+export interface IUser {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    birthday: Date;
+}
+
+export interface IUsers {
+    users: IUser[]
+}
+
 export interface IDBError {
     code: string;
     errno: number;
