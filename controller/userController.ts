@@ -1,7 +1,8 @@
 import connection from "../config/dbConnection"
 import { IDBError, IUser } from "../utils/types"
 const jwt = require('jsonwebtoken')
-import { getAllUsers, getUserByName } from './../repository/userRepository'
+import {v4 as uuidv4 } from 'uuid'
+import { getAllUsers, getUserByName, getUserById, insertUser, deleteUser } from './../repository/userRepository'
 
 export const getAllUsersController = (req: any, res: any) => {
   getAllUsers((error: IDBError, users: IUser) => {
@@ -19,49 +20,44 @@ export const getAllUsersController = (req: any, res: any) => {
     })
 }
 
-export const insertUser = (req: any, res: any) => {
-    // //Obter o dado do request - nome, email, username, senha
-    // const usuario = req.body;
+export const insertUserController = (req:any, res:any) => {    
+    const user = req.body;
+    user.id = uuidv4();
     
-    // //SQL
-    // const sql = "INSERT INTO usuario(nome,email,username,senha) VALUES (?,?,?,?)"
-
-    // conexao.query(sql, [usuario.nome, usuario.email, usuario.username, usuario.senha],
-    //     (erro, rows) => {
-    //     if(erro){
-    //         res.status(500).json({"erro:":"Database Error"})
-    //         console.log(erro)
-    //     }
-    //     else {
-    //         usuario.id = rows.insertId;
-    //         res.status(201).json(usuario)
-    //     }
-    // })
+    insertUser(user, (error: IDBError, savedUser: IUser) => {
+        if(error){
+            res.status(500).json(
+                {
+                    "Type": "There has been a database error!",
+                    "Message": error.sqlMessage,
+                    "Query": error.sql
+                })
+        }
+        else {
+            res.status(201).json(savedUser)
+        }
+    })
 }
 
-export const getUserById = (req: any, res: any) => {
-    // const id = req.params.id;
-    // const sql = "SELECT * FROM usuario WHERE id=?";
-
-    // conexao.query(sql, [id], (erro, rows) => {
-    //     if(erro){
-    //         res.status(500).json({"erro:":"Database Error"})
-    //         console.log(erro)
-    //     }
-    //     else {
-    //         if(rows && rows.length > 0){
-    //             res.json(rows[0])
-    //         }
-    //         else{ 
-    //             res.status(404).json({"msg":"usuario nao encontrado"})
-    //         }
-    //     }
-    // })
+export const getUserByIdController = (req: any, res: any) => {
+  const id = req.params.id;
+  getUserById(id, (error: any, user: IUser) => {
+      if(error){
+        res.status(error.status).json(
+          {
+            "Type": "There has been a network error!",
+            "Status": error.status,
+            "Message": error.message,
+        })
+      }
+      else {
+          res.json(user)
+      }
+  })
 }
 
 export const getByNameController = (req: any, res: any) => {    
     if(req.query){
-      console.log('req.query :>> ', req.query);
         const firstName = req.query.firstName;
         const lastName = req.query.lastName;
 
@@ -75,44 +71,60 @@ export const getByNameController = (req: any, res: any) => {
         });
     }
     else{
-        res.status(400).json({"status":400, "msg":"Necessario especificar username."})
+        res.status(400).json({"status":400, "msg":"Necessario especificar nome completo."})
     }
 
 
 }
 
-export const updateUser = (req: any, res: any) => {
-    // const id = req.params.id;
-    // const usuario = req.body;
+export const updateUserController = (req:any, res:any) => {
+    const id = req.params.id;
+    const user: IUser = req.body;
 
-    // const sql = `UPDATE usuario SET nome=?, email=?, username=?, senha=? WHERE id=?`;
-    // conexao.query(sql, [usuario.nome, usuario.email, usuario.username, usuario.senha, id], 
-    //     (erro, rows) => {
-    //     if(erro){
-    //         res.status(500).json({"erro:":"Database Error"})
-    //         console.log(erro)
-    //     }
-    //     else {
-    //         usuario.id = +id; //Sinal de "+" -> converte String para number (ou usar parseInt)
-    //         res.json(usuario);
-    //     }
-    // })
+    const sql = `UPDATE users SET firstName=?, lastName=?, email=?, birthday=? WHERE id=?`;
+    connection.query(sql, [user.firstName, user.lastName, user.email, user.birthday, id], (error, rows) => {
+        if(error){
+          res.status(error.code).json(
+            {
+              "Type": "There has been a database error!",
+              "Code": error.code,
+              "Message": error.sqlMessage,
+              "Query": error.sql          
+          })
+        }
+        else {
+            res.json(user);
+        }
+    })
 }
 
-export const deleteUser = (req: any, res: any) => {
-    // const id = req.params.id;
-
-    // const sql = `DELETE FROM usuario WHERE id=?`;
-    // conexao.query(sql, [id], (erro, rows) => {
-    //     if(erro){
-    //         res.status(500).json({"erro:":"Database Error"})
-    //         console.log(erro)
-    //     }
-    //     else {
-    //         if(rows.affectedRows)
-    //         res.json({"msg": `Usuario ${id} removido com sucesso`});
-    //     }
-    // })
+export const deleteUserController = (req:any, res:any) => {
+  const id = req.params.id;    
+    getUserById(id, (error: any, user: IUser) => {
+      if(error){
+        res.status(error.status).json(
+          {
+            "Type": "There has been a network error!",
+            "Status": error.status,
+            "Message": error.message
+          })
+      }
+      else {
+        deleteUser(id, (error: any, id: string) => {
+          if(error){
+            res.status(error.status).json(
+              {
+                "Type": "There has been a network error!",
+                "Status": error.status,
+                "Message": error.message
+              })
+          }
+          else {
+            res.json(user)
+          }        
+        })
+      }
+    })
 }
 
 export const validateUser = (req: any, res: any) => {
