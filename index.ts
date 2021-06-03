@@ -12,6 +12,9 @@ app.use('/api/books', bookRoutes)
 import userRoutes from './routes/user'
 app.use('/api/users', userRoutes)
 
+import reviewRoutes from './routes/review'
+app.use('/api/reviews', reviewRoutes)
+
 app.listen(port, () => {
   console.log(`Executando servidor em http://localhost:${port}`)
 })
