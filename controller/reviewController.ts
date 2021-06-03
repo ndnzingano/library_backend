@@ -15,10 +15,10 @@ export const getAllReviewsController = (req: any, res: any) => {
             })     
         }
         else {
-            res.json(reviews)
+          res.status(200).json({"reviews": reviews})
         }
     })
-}
+};
 
 export const insertReviewController = (req:any, res:any) => {    
     const review = req.body;
@@ -34,63 +34,68 @@ export const insertReviewController = (req:any, res:any) => {
                 })
         }
         else {
-            res.status(201).json(savedReview)
+          res.status(201).json({
+            "status":201,
+            "result":savedReview
+          })  
         }
     })
-}
+};
 
 export const getReviewByIdController = (req: any, res: any) => {
   const id = req.params.id;
   getReviewById(id, (error: any, review: IReview) => {
       if(error){
-        res.status(error.status).json(
-          {
-            "Type": "There has been a network error!",
-            "Status": error.status,
-            "Message": error.message,
-        })
+        res.status(error.status).json(error)
+
       }
       else {
-          res.json(review)
+        res.status(200).json({
+          "status": 200,
+          "result": review
+        })     
       }
   })
-}
+};
 
-export const getReviewByBookIdController = (req: any, res: any) => {    
-    if(req.query){
-        const id = req.query.book;
+export const getReviewByQueryController = (req: any, res: any) => {  
+    if(req.query.book){
+        const book = req.query.book;
 
-        getReviewByBookId(id, (err: any, review: IReview) => {
+        getReviewByBookId(book, (err: any, review: IReview) => {
             if(err){
                 res.status(err.status).json(err);
             }
             else {
-                res.json(review);
+              res.status(200).json({
+                "status": 200,
+                "result": review
+              })  
             }
         });
     }
-    else{
-        res.status(400).json({"status":400, "msg":"Necessario especificar nome completo."})
-    }
-}
+    else if(req.query.user) {
+      const user = req.query.user;
 
-export const getReviewByUserIdController = (req: any, res: any) => {    
-  if(req.query){
-      const id = req.query.user;
-
-      getReviewByUserId(id, (err: any, review: IReview) => {
+      getReviewByUserId(user, (err: any, review: IReview) => {
           if(err){
               res.status(err.status).json(err);
           }
           else {
-              res.json(review);
+            res.status(200).json({
+              "status": 200,
+              "result": review
+            })  
           }
       });
-  }
-  else{
-      res.status(400).json({"status":400, "msg":"Necessario especificar nome completo."})
-  }
-}
+    }
+    else{
+      res.status(400).json({
+        "status": 400, 
+        "message":"There has been a problem with the query, check the information provided"
+      })
+    }
+};
 
 export const updateReviewController = (req:any, res:any) => {
     const id = req.params.id;
@@ -108,7 +113,10 @@ export const updateReviewController = (req:any, res:any) => {
           })
         }
         else {
-            res.json(review);
+          res.status(201).json({
+            "status":201,
+            "result": review
+          })
         }
     })
 }
@@ -135,7 +143,10 @@ export const deleteReviewController = (req:any, res:any) => {
               })
           }
           else {
-            res.json(review)
+            res.status(204).json({
+              'status': 204,
+              'result': review
+            })       
           }        
         })
       }

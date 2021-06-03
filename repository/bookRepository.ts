@@ -16,7 +16,6 @@ export const getAllBooks = (callback: any) => {
 }
 
 export const insertBook = (book: IBook, callback: any) => {   
-    //SQL
     const sql = "INSERT INTO books(id,title,authorFirstName,authorLastName,isbn,pagesNr) VALUES (?,?,?,?,?,?)"
 
     connection.query(sql, [book.id, book.title, book.authorFirstName, book.authorLastName, book.isbn, book.pagesNr],
@@ -38,7 +37,7 @@ export const getByBookId = (id: string, callback: any) => {
         if(err){
             const error = {
                 status: 500,
-                msg: err
+                message: err
             }
             callback(error, null);
         }
@@ -49,7 +48,7 @@ export const getByBookId = (id: string, callback: any) => {
             else{ 
                 const error = {
                     status: 404,
-                    msg: "book not found"
+                    message: `Book with id: '${id}' not found.`
                 }
                 callback(error, null);
             }
@@ -64,7 +63,7 @@ export const deleteBook = (id: string, callback: any) => {
         if(err){
             const error = {
                 status: 500,
-                msg: err
+                message: err
             }
             callback(error, null);
         }
@@ -76,7 +75,7 @@ export const deleteBook = (id: string, callback: any) => {
             else {
                 const error = {
                     status: 500,
-                    msg: err
+                    message: err
                 }
                 callback(error, null);    
             }

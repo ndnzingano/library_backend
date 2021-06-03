@@ -20,7 +20,7 @@ export const getUserByName = (firstName: string, lastName: string, callback: any
         if(err){            
             const error = {
                 status: 500,
-                msg: err
+                message: err
             }
             callback(error,null);
         }
@@ -31,7 +31,33 @@ export const getUserByName = (firstName: string, lastName: string, callback: any
             else{ 
                 const error = {
                     status: 404,
-                    msg: "User not found"
+                    message: `User with firstName: '${firstName}' and lastName: '${lastName}' not found.`
+                }
+                callback(error,null);
+            }
+        }
+    })
+
+}
+
+export const getUserByEmail = (email: string, callback: any) => {
+    const sql = "SELECT * FROM users where email=?";
+    connection.query(sql, [email], (err, rows) => {
+        if(err){            
+            const error = {
+                status: 500,
+                message: err
+            }
+            callback(error,null);
+        }
+        else {
+            if(rows && rows.length > 0){
+                callback(null,rows[0]);
+            }
+            else{ 
+                const error = {
+                    status: 404,
+                    message: `User with email: '${email}' not found.`
                 }
                 callback(error,null);
             }
@@ -47,7 +73,7 @@ export const getUserById = (id: string, callback: any) => {
         if(err){
             const error = {
                 status: 500,
-                msg: err
+                message: err
             }
             callback(error, null);
         }
@@ -58,7 +84,7 @@ export const getUserById = (id: string, callback: any) => {
             else{ 
                 const error = {
                     status: 404,
-                    msg: "user not found"
+                    message: `User with id: '${id}' not found.`
                 }
                 callback(error, null);
             }
@@ -89,7 +115,7 @@ export const deleteUser = (id: string, callback: any) => {
         if(err){
             const error = {
                 status: 500,
-                msg: err
+                message: err
             }
             callback(error, null);
         }
@@ -101,7 +127,7 @@ export const deleteUser = (id: string, callback: any) => {
             else {
                 const error = {
                     status: 500,
-                    msg: err
+                    message: err
                 }
                 callback(error, null);    
             }
