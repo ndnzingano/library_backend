@@ -58,7 +58,7 @@ export const getReviewByIdController = (req: any, res: any) => {
 
 export const getReviewByBookIdController = (req: any, res: any) => {    
     if(req.query){
-        const id = req.query.id;
+        const id = req.query.book;
 
         getReviewByBookId(id, (err: any, review: IReview) => {
             if(err){
@@ -76,7 +76,7 @@ export const getReviewByBookIdController = (req: any, res: any) => {
 
 export const getReviewByUserIdController = (req: any, res: any) => {    
   if(req.query){
-      const id = req.query.id;
+      const id = req.query.user;
 
       getReviewByUserId(id, (err: any, review: IReview) => {
           if(err){

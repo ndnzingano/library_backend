@@ -11,9 +11,9 @@ import {
 } from './../controller/reviewController'
 
 routes.get('/', getAllReviewsController)
-routes.get('/:id', getReviewByBookIdController)
+routes.get('/', getReviewByBookIdController)
 routes.get('/:id', getReviewByIdController)
-routes.get('/:id', getReviewByUserIdController)
+routes.get('/', getReviewByUserIdController)
 routes.post('/', insertReviewController)
 routes.put('/:id', updateReviewController)
 routes.delete('/:id', deleteReviewController)
