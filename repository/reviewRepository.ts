@@ -26,7 +26,7 @@ export const getReviewByUserId = (id: string, callback: any) => {
         }
         else {
             if(rows && rows.length > 0){
-                callback(null,rows[0]);
+                callback(null,rows);
             }
             else{ 
                 const error = {
@@ -52,7 +52,7 @@ export const getReviewByBookId = (id: string, callback: any) => {
       }
       else {
           if(rows && rows.length > 0){
-              callback(null,rows[0]);
+              callback(null,rows);
           }
           else{ 
               const error = {

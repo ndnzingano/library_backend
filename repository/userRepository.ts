@@ -94,9 +94,9 @@ export const getUserById = (id: string, callback: any) => {
 
 export const insertUser = (user: IUser, callback: any) => {
 
-    const sql = "INSERT INTO users(id, firstName, lastName, email, birthday) VALUES (?,?,?,?,?)"
+    const sql = "INSERT INTO users(id, firstName, lastName, email, password, birthday) VALUES (?,?,?,?,?,?)"
 
-    connection.query(sql, [user.id, user.firstName, user.lastName, user.email, user.birthday],
+    connection.query(sql, [user.id, user.firstName, user.lastName, user.email, user.password, user.birthday],
         (erro, rows) => {
             if(erro){
                 callback(erro, null)
