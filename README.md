@@ -7,3 +7,5 @@ npm install
 # run 
 npm start
 
+# db
+mySQL database
