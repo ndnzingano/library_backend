@@ -58,7 +58,7 @@ export const getReviewByIdController = (req: any, res: any) => {
   })
 };
 
-export const getReviewByQueryController = (req: any, res: any) => {  
+export const getReviewByBookIdController = (req: any, res: any) => {  
     if(req.query.book){
         const book = req.query.book;
 
@@ -73,28 +73,36 @@ export const getReviewByQueryController = (req: any, res: any) => {
               })  
             }
         });
-    }
-    else if(req.query.user) {
-      const user = req.query.user;
-
-      getReviewByUserId(user, (err: any, review: IReview) => {
-          if(err){
-              res.status(err.status).json(err);
-          }
-          else {
-            res.status(200).json({
-              "status": 200,
-              "result": review
-            })  
-          }
-      });
-    }
-    else{
+    } else{
       res.status(400).json({
         "status": 400, 
         "message":"There has been a problem with the query, check the information provided"
       })
     }
+};
+
+export const getReviewByUserIdController = (req: any, res: any) => {  
+  if(req.query.user) {
+    const user = req.query.user;
+
+    getReviewByUserId(user, (err: any, review: IReview) => {
+        if(err){
+            res.status(err.status).json(err);
+        }
+        else {
+          res.status(200).json({
+            "status": 200,
+            "result": review
+          })  
+        }
+    });
+  }
+  else{
+    res.status(400).json({
+      "status": 400, 
+      "message":"There has been a problem with the query, check the information provided"
+    })
+  }
 };
 
 export const updateReviewController = (req:any, res:any) => {
@@ -139,7 +147,7 @@ export const deleteReviewController = (req:any, res:any) => {
               {
                 "Type": "There has been a network error!",
                 "Status": error.status,
-                "Message": error.message
+                "Message": error.message.sqlMessage ? error.message.sqlMessage : error.message 
               })
           }
           else {

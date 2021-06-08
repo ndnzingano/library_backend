@@ -16,7 +16,12 @@ export interface IUser {
     firstName: string;
     lastName: string;
     email: string;
+    password: string;
     birthday: Date;
+}
+
+export interface IUsers {
+    users: IUser[]
 }
 
 export interface IReview {
@@ -31,10 +36,6 @@ export interface IReview {
 
 export interface IReviews {
     reviews: IReview[]
-}
-
-export interface IUsers {
-    users: IUser[]
 }
 
 export interface IDBError {

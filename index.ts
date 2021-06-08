@@ -1,11 +1,41 @@
 import express from 'express'
+import { validateToken } from './controller/userController'
+import swaggerJSDoc from 'swagger-jsdoc'
+import swaggerUi  from 'swagger-ui-express'
 const app = express()
 const port = 2100
 
-app.use(express.json()) // for parsing application/json
-app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+const swaggerOptions = {
+  swaggerDefinition: {
+    info: {
+      title: 'Bookster API',
+      description: 'Bookster API information',
+      contact: {
+        name: 'Nadine Zíngano'
+      },
+      version: '1.0',
+      servers: ['http://localhost:2100']
+    }
+  },
+  apis: ['index.js', './routes/*ts']
+};
 
-// Rotas
+const swaggerDocs = swaggerJSDoc(swaggerOptions);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+
+app.use(express.json()) 
+app.use(express.urlencoded({ extended: true })) 
+
+
+import auth from './routes/auth'
+app.use('/api/auth', auth)
+
+//Middleware 
+app.use(validateToken)
+
+// Routes
 import bookRoutes from './routes/book'
 app.use('/api/books', bookRoutes)
 

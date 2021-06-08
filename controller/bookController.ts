@@ -112,7 +112,7 @@ export const deleteBookController = (req:any, res:any) => {
               {
                 "Type": "There has been a network error!",
                 "Status": error.status,
-                "Message": error.message
+                "Message": error.message.sqlMessage ? error.message.sqlMessage : error.message 
               })
           }
           else {
