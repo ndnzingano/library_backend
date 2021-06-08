@@ -62,14 +62,14 @@ export const getReviewByBookIdController = (req: any, res: any) => {
     if(req.query.book){
         const book = req.query.book;
 
-        getReviewByBookId(book, (err: any, review: IReview) => {
+        getReviewByBookId(book, (err: any, reviews: IReview[]) => {
             if(err){
                 res.status(err.status).json(err);
             }
             else {
               res.status(200).json({
                 "status": 200,
-                "result": review
+                "result": reviews
               })  
             }
         });
@@ -85,14 +85,14 @@ export const getReviewByUserIdController = (req: any, res: any) => {
   if(req.query.user) {
     const user = req.query.user;
 
-    getReviewByUserId(user, (err: any, review: IReview) => {
+    getReviewByUserId(user, (err: any, reviews: IReview[]) => {
         if(err){
             res.status(err.status).json(err);
         }
         else {
           res.status(200).json({
             "status": 200,
-            "result": review
+            "result": reviews
           })  
         }
     });

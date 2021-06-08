@@ -15,7 +15,7 @@ import {
  * /api/users:
  *   post:
  *    tags:
- *    - "user"
+ *    - "users"
  *    summary: "Post new user"
  *    description: ""
  *    operationId: "postUser"
@@ -61,7 +61,7 @@ import {
  * /api/users:
  *   get:
  *    tags:
- *    - "user"
+ *    - "users"
  *    summary: "Get all users"
  *    description: ""
  *    operationId: "getUsers"
@@ -89,7 +89,7 @@ routes.get('/', getAllUsersController)
  * /api/users/search/:
  *   get:
  *    tags:
- *    - "user"
+ *    - "users"
  *    summary: "Get User by email"
  *    description: ""
  *    operationId: "getUserByEmail"
@@ -121,7 +121,7 @@ routes.get('/search', getUserByEmailController)
  * /api/users/{id}:
  *   get:
  *    tags:
- *    - "user"
+ *    - "users"
  *    summary: "Get User by Id"
  *    description: ""
  *    operationId: "getUserById"
@@ -154,7 +154,7 @@ routes.get('/:id', getUserByIdController)
  * /api/users/{id}:
  *   put:
  *    tags:
- *    - "user"
+ *    - "users"
  *    summary: "Update user"
  *    description: ""
  *    operationId: "putUser"
@@ -206,7 +206,7 @@ routes.put('/:id', updateUserController)
  * /api/users/{id}:
  *   delete:
  *    tags:
- *    - "user"
+ *    - "users"
  *    summary: "Delete user"
  *    description: ""
  *    operationId: "deleteUser"
