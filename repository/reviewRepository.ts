@@ -1,5 +1,5 @@
 import connection from "../config/dbConnection";
-import { IUser, IReview } from "../utils/types";
+import { IReview } from "../utils/types";
 
 export const getAllReviews = (callback: any) => {
     const sql = "SELECT * FROM reviews";
@@ -20,7 +20,7 @@ export const getReviewByUserId = (id: string, callback: any) => {
         if(err){            
             const error = {
                 status: 500,
-                msg: err
+                message: err
             }
             callback(error,null);
         }
@@ -31,7 +31,7 @@ export const getReviewByUserId = (id: string, callback: any) => {
             else{ 
                 const error = {
                     status: 404,
-                    msg: "User not found"
+                    message: `Review that contains an user with id: '${id}' not found.`
                 }
                 callback(error,null);
             }
@@ -46,7 +46,7 @@ export const getReviewByBookId = (id: string, callback: any) => {
       if(err){            
           const error = {
               status: 500,
-              msg: err
+              message: err
           }
           callback(error,null);
       }
@@ -57,8 +57,8 @@ export const getReviewByBookId = (id: string, callback: any) => {
           else{ 
               const error = {
                   status: 404,
-                  msg: "User not found"
-              }
+                  message: `Review that contains a book with id: '${id}' not found.`
+                }
               callback(error,null);
           }
       }
@@ -73,7 +73,7 @@ export const getReviewById = (id: string, callback: any) => {
         if(err){
             const error = {
                 status: 500,
-                msg: err
+                message: err
             }
             callback(error, null);
         }
@@ -84,7 +84,7 @@ export const getReviewById = (id: string, callback: any) => {
             else{ 
                 const error = {
                     status: 404,
-                    msg: "user not found"
+                    message: `Review with id: '${id}' not found.`
                 }
                 callback(error, null);
             }
@@ -107,7 +107,6 @@ export const insertReview = (review: IReview, callback: any) => {
     })    
 }
 
-
 export const deleteReview = (id: string, callback: any) => {
     const sql = `DELETE FROM reviews WHERE id=?`;
 
@@ -115,7 +114,7 @@ export const deleteReview = (id: string, callback: any) => {
         if(err){
             const error = {
                 status: 500,
-                msg: err
+                message: err
             }
             callback(error, null);
         }
@@ -127,7 +126,7 @@ export const deleteReview = (id: string, callback: any) => {
             else {
                 const error = {
                     status: 500,
-                    msg: err
+                    message: err
                 }
                 callback(error, null);    
             }
